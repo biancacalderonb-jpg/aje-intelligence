@@ -1,0 +1,34 @@
+export type Dominio =
+  | 'consumidor'
+  | 'canales'
+  | 'operaciones'
+  | 'tecnologia'
+  | 'margen'
+  | 'competencia'
+  | 'finanzas'
+  | 'coherencia'
+  | 'ciencia';
+
+export type LineaRelacionada = 'aje' | 'toquea' | 't3a' | 'ventures' | 'todas';
+export type Relevancia = 'alta' | 'media' | 'baja';
+
+export interface Noticia {
+  id: string;
+  titulo: string;
+  resumen: string;
+  fuente: string;
+  dominio: Dominio;
+  linea_relacionada: LineaRelacionada;
+  relevancia: Relevancia;
+  es_manual: boolean;
+  created_at: string;
+}
+
+export type SearchStatus = 'idle' | 'pending' | 'searching' | 'done' | 'error';
+
+export interface DominioProgress {
+  dominio: Dominio;
+  status: SearchStatus;
+  count: number;
+  error?: string;
+}
