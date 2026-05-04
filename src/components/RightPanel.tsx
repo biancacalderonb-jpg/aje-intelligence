@@ -14,6 +14,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
   const [titulo, setTitulo] = useState('');
   const [resumen, setResumen] = useState('');
   const [fuente, setFuente] = useState('');
+  const [url, setUrl] = useState('');
   const [linea, setLinea] = useState<LineaRelacionada>('todas');
   const [relevancia, setRelevancia] = useState<Relevancia>('media');
   const [saving, setSaving] = useState(false);
@@ -38,7 +39,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
       const res = await fetch('/api/manual', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ titulo, resumen, fuente, linea_relacionada: linea, relevancia }),
+        body: JSON.stringify({ titulo, resumen, fuente, url, linea_relacionada: linea, relevancia }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -48,6 +49,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
       setTitulo('');
       setResumen('');
       setFuente('');
+      setUrl('');
       setLinea('todas');
       setRelevancia('media');
       onManualSaved();
@@ -142,6 +144,26 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
               placeholder="Pega el post o describe la señal observada..."
               rows={5}
               className="w-full text-sm rounded-lg px-3 py-2 outline-none resize-none transition-all placeholder:text-slate-600"
+              style={{
+                background: '#111118',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#f1f5f9',
+              }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(167,139,250,0.4)')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#64748b' }}>
+              URL del post o artículo
+            </label>
+            <input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://linkedin.com/posts/..."
+              className="w-full text-sm rounded-lg px-3 py-2 outline-none transition-all placeholder:text-slate-600"
               style={{
                 background: '#111118',
                 border: '1px solid rgba(255,255,255,0.08)',

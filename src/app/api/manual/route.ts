@@ -10,7 +10,7 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { titulo, resumen, fuente, linea_relacionada, relevancia } = body;
+    const { titulo, resumen, fuente, url, linea_relacionada, relevancia } = body;
 
     if (!titulo?.trim() || !resumen?.trim()) {
       return NextResponse.json({ error: 'Título y resumen son obligatorios' }, { status: 400 });
@@ -19,10 +19,16 @@ export async function POST(request: NextRequest) {
     const validLineas: LineaRelacionada[] = ['aje', 'toquea', 't3a', 'ventures', 'todas'];
     const validRelevancias: Relevancia[] = ['alta', 'media', 'baja'];
 
+    let sanitizedUrl: string | null = null;
+    if (url?.trim()) {
+      try { sanitizedUrl = new URL(url.trim()).href; } catch {}
+    }
+
     const { error } = await supabase.from('noticias').insert({
       titulo: titulo.trim().slice(0, 300),
       resumen: resumen.trim().slice(0, 2000),
       fuente: (fuente || 'Manual').trim().slice(0, 200),
+      url: sanitizedUrl,
       dominio: 'operaciones',
       linea_relacionada: validLineas.includes(linea_relacionada) ? linea_relacionada : 'todas',
       relevancia: validRelevancias.includes(relevancia) ? relevancia : 'media',

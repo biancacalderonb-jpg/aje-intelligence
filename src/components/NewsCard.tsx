@@ -109,7 +109,23 @@ export default function NewsCard({ noticia, onDelete }: NewsCardProps) {
       </div>
 
       {/* Title */}
-      <h3 className="text-white font-semibold text-sm leading-snug mb-2">{noticia.titulo}</h3>
+      <h3 className="font-semibold text-sm leading-snug mb-2">
+        {noticia.url ? (
+          <a
+            href={noticia.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:underline decoration-slate-500 underline-offset-2 transition-colors"
+            style={{ color: 'inherit' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#a78bfa')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+          >
+            {noticia.titulo}
+          </a>
+        ) : (
+          <span className="text-white">{noticia.titulo}</span>
+        )}
+      </h3>
 
       {/* Summary */}
       <p className="text-sm leading-relaxed mb-3" style={{ color: '#94a3b8' }}>
@@ -118,10 +134,25 @@ export default function NewsCard({ noticia, onDelete }: NewsCardProps) {
 
       {/* Footer */}
       <div className="flex items-center gap-3">
-        <span className="flex items-center gap-1 text-xs" style={{ color: '#475569' }}>
-          <ExternalLink size={11} />
-          {noticia.fuente}
-        </span>
+        {noticia.url ? (
+          <a
+            href={noticia.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs transition-colors"
+            style={{ color: '#475569' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#94a3b8')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
+          >
+            <ExternalLink size={11} />
+            {noticia.fuente}
+          </a>
+        ) : (
+          <span className="flex items-center gap-1 text-xs" style={{ color: '#475569' }}>
+            <ExternalLink size={11} />
+            {noticia.fuente}
+          </span>
+        )}
 
         {isLong && (
           <button

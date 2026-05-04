@@ -17,6 +17,7 @@ export interface Noticia {
   titulo: string;
   resumen: string;
   fuente: string;
+  url: string | null;
   dominio: Dominio;
   linea_relacionada: LineaRelacionada;
   relevancia: Relevancia;

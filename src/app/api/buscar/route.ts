@@ -17,6 +17,7 @@ interface NoticiaRaw {
   titulo?: string;
   resumen?: string;
   fuente?: string;
+  url?: string;
   relevancia?: string;
 }
 
@@ -63,6 +64,16 @@ function sanitizeRelevancia(r?: string): Relevancia {
   return 'media';
 }
 
+function sanitizeUrl(u?: string): string | null {
+  if (!u || u === 'null' || u.trim() === '') return null;
+  try {
+    const parsed = new URL(u.trim());
+    return parsed.href;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -99,6 +110,7 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
       "titulo": "Título conciso que describe la señal estratégica",
       "resumen": "2-3 oraciones: qué ocurrió, datos concretos si los hay, y por qué importa estratégicamente para una empresa de bebidas y consumo masivo en Latam",
       "fuente": "Nombre del medio o fuente específica",
+      "url": "https://url-completa-del-articulo.com (si está disponible, si no omitir o null)",
       "relevancia": "alta|media|baja"
     }
   ]
@@ -130,6 +142,7 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
       titulo: n.titulo?.slice(0, 300) || 'Sin título',
       resumen: n.resumen?.slice(0, 2000) || 'Sin resumen',
       fuente: n.fuente?.slice(0, 200) || 'Desconocida',
+      url: sanitizeUrl(n.url),
       dominio: dominioKey,
       linea_relacionada: inferLinea(n.titulo || '', n.resumen || ''),
       relevancia: sanitizeRelevancia(n.relevancia),
