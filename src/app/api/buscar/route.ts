@@ -104,11 +104,14 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
   ]
 }`;
 
+    // web_search_20250305 is a server-side Anthropic tool not yet in the SDK types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tools: any[] = [{ type: 'web_search_20250305', name: 'web_search', max_uses: dominio.queries.length + 2 }];
+
     const response = await anthropic.messages.create({
       model: 'claude-opus-4-7',
       max_tokens: 4000,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tools: [{ type: 'web_search_20250305' as any, name: 'web_search', max_uses: dominio.queries.length + 2 }],
+      tools,
       messages: [{ role: 'user', content: prompt }],
     });
 
