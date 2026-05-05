@@ -6,6 +6,7 @@ import { DOMINIOS, DOMINIOS_ORDER } from '@/lib/domains';
 
 interface HeaderProps {
   searching: boolean;
+  searchMessage: string;
   progress: Record<Dominio, DominioProgress> | null;
   ultimaBusqueda: string | null;
   totalCount: number;
@@ -30,7 +31,7 @@ function ProgressIcon({ status }: { status: DominioProgress['status'] }) {
   return <Circle size={12} className="text-slate-600" />;
 }
 
-export default function Header({ searching, progress, ultimaBusqueda, totalCount, onSearch }: HeaderProps) {
+export default function Header({ searching, searchMessage, progress, ultimaBusqueda, totalCount, onSearch }: HeaderProps) {
   return (
     <header
       className="sticky top-0 z-50 border-b"
@@ -84,8 +85,10 @@ export default function Header({ searching, progress, ultimaBusqueda, totalCount
         >
           {searching ? (
             <>
-              <Loader2 size={14} className="animate-spin" />
-              Buscando señales...
+              <Loader2 size={14} className="animate-spin flex-shrink-0" />
+              <span className="truncate max-w-xs">
+                {searchMessage || 'Iniciando búsqueda...'}
+              </span>
             </>
           ) : (
             <>
@@ -96,32 +99,67 @@ export default function Header({ searching, progress, ultimaBusqueda, totalCount
         </button>
       </div>
 
-      {/* Progress bar during search */}
+      {/* Progress strip during search */}
       {searching && progress && (
         <div
-          className="flex items-center gap-1 px-6 py-2 overflow-x-auto"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.04)', background: 'rgba(255,255,255,0.02)' }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)' }}
         >
-          {DOMINIOS_ORDER.map((key) => {
-            const d = DOMINIOS[key];
-            const p = progress[key];
+          {/* Domain pill row */}
+          <div className="flex items-center gap-1 px-6 py-2 overflow-x-auto">
+            {DOMINIOS_ORDER.map((key) => {
+              const d = DOMINIOS[key];
+              const p = progress[key];
+              const isActive = p?.status === 'searching';
+              const isDone = p?.status === 'done';
+              const isError = p?.status === 'error';
+              return (
+                <div
+                  key={key}
+                  className="flex items-center gap-1.5 text-xs whitespace-nowrap px-2.5 py-1 rounded-full transition-all"
+                  style={{
+                    background: isActive
+                      ? `${d.color}20`
+                      : isDone
+                      ? `${d.color}10`
+                      : 'rgba(255,255,255,0.03)',
+                    color: isActive
+                      ? d.color
+                      : isDone
+                      ? `${d.color}cc`
+                      : isError
+                      ? '#f87171'
+                      : '#334155',
+                    border: isActive ? `1px solid ${d.color}40` : '1px solid transparent',
+                  }}
+                >
+                  <ProgressIcon status={p?.status ?? 'pending'} />
+                  <span>{d.label}</span>
+                  {isDone && p.count > 0 && (
+                    <span className="font-semibold">+{p.count}</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Progress bar */}
+          {(() => {
+            const done = DOMINIOS_ORDER.filter(
+              (k) => progress[k]?.status === 'done' || progress[k]?.status === 'error'
+            ).length;
+            const pct = Math.round((done / DOMINIOS_ORDER.length) * 100);
             return (
-              <div
-                key={key}
-                className="flex items-center gap-1.5 text-xs whitespace-nowrap px-2 py-1 rounded"
-                style={{
-                  background: p?.status === 'searching' ? `${d.color}18` : 'transparent',
-                  color: p?.status === 'done' ? d.color : p?.status === 'error' ? '#f87171' : '#64748b',
-                }}
-              >
-                <ProgressIcon status={p?.status ?? 'pending'} />
-                <span>{d.label}</span>
-                {p?.status === 'done' && p.count > 0 && (
-                  <span className="ml-0.5 opacity-60">+{p.count}</span>
-                )}
+              <div className="h-0.5 w-full" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                <div
+                  className="h-0.5 transition-all duration-500"
+                  style={{
+                    width: `${pct}%`,
+                    background: 'linear-gradient(90deg, #a78bfa, #38bdf8)',
+                  }}
+                />
               </div>
             );
-          })}
+          })()}
         </div>
       )}
     </header>

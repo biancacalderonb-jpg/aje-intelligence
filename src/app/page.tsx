@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { DOMINIOS_ORDER } from '@/lib/domains';
+import { DOMINIOS, DOMINIOS_ORDER } from '@/lib/domains';
 import { Noticia, Dominio, LineaRelacionada, DominioProgress } from '@/types';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
@@ -13,6 +13,7 @@ export default function Home() {
   const [noticias, setNoticias] = useState<Noticia[]>([]);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
+  const [searchMessage, setSearchMessage] = useState('');
   const [progress, setProgress] = useState<Record<Dominio, DominioProgress> | null>(null);
   const [dominioFilter, setDominioFilter] = useState<Dominio | null>(null);
   const [lineaFilter, setLineaFilter] = useState<LineaRelacionada | null>(null);
@@ -63,7 +64,12 @@ export default function Home() {
     );
     setProgress(initialProgress);
 
-    for (const dominioKey of DOMINIOS_ORDER) {
+    for (let i = 0; i < DOMINIOS_ORDER.length; i++) {
+      const dominioKey = DOMINIOS_ORDER[i];
+      const label = DOMINIOS[dominioKey].label;
+      const step = `(${i + 1}/${DOMINIOS_ORDER.length})`;
+
+      setSearchMessage(`Buscando ${label}... ${step}`);
       setProgress((prev) =>
         prev ? { ...prev, [dominioKey]: { ...prev[dominioKey], status: 'searching' } } : prev
       );
@@ -110,6 +116,7 @@ export default function Home() {
     setUltimaBusqueda(now);
     localStorage.setItem('aje_ultima_busqueda', now);
 
+    setSearchMessage('');
     setSearching(false);
     await fetchNoticias();
 
@@ -134,6 +141,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen" style={{ background: '#08080e' }}>
       <Header
         searching={searching}
+        searchMessage={searchMessage}
         progress={progress}
         ultimaBusqueda={ultimaBusqueda}
         totalCount={totalCount}
