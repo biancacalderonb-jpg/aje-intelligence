@@ -6,6 +6,9 @@ import { Dominio, LineaRelacionada, Relevancia } from '@/types';
 
 export const maxDuration = 120;
 
+const hoy = new Date().toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+const ayer = new Date(Date.now() - 86400000).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const supabase = createClient(
@@ -87,16 +90,18 @@ export async function POST(request: NextRequest) {
 
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
+IMPORTANTE: Solo busca y reporta noticias publicadas entre ${ayer} y ${hoy} (últimas 24 horas). Si una noticia es más antigua, ignórala completamente. Incluye la fecha de publicación en cada resultado.
+
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
 
 TAREA: Realiza búsquedas web con estas consultas exactas y encuentra señales estratégicas relevantes:
-${dominio.queries.map((q, i) => `${i + 1}. "${q}"`).join('\n')}
+${dominio.queries.map((q, i) => `${i + 1}. "${q} 2026 últimas 24 horas"`).join('\n')}
 
 FUENTES PRIORITARIAS: ${dominio.fuentes}
 
 CRITERIOS DE SELECCIÓN:
-- Prioriza información de los últimos 60 días
+- SOLO noticias de las últimas 24 horas (entre ${ayer} y ${hoy})
 - Busca señales de CAMBIO, no noticias genéricas
 - Relevancia ALTA: disrupciones significativas, regulaciones nuevas con impacto directo, movimientos competitivos relevantes
 - Relevancia MEDIA: tendencias emergentes, cambios de comportamiento, novedades tecnológicas
@@ -108,7 +113,7 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
   "noticias": [
     {
       "titulo": "Título conciso que describe la señal estratégica",
-      "resumen": "2-3 oraciones: qué ocurrió, datos concretos si los hay, y por qué importa estratégicamente para una empresa de bebidas y consumo masivo en Latam",
+      "resumen": "2-3 oraciones: qué ocurrió (con fecha de publicación), datos concretos si los hay, y por qué importa estratégicamente para una empresa de bebidas y consumo masivo en Latam",
       "fuente": "Nombre del medio o fuente específica",
       "url": "https://url-completa-del-articulo.com (si está disponible, si no omitir o null)",
       "relevancia": "alta|media|baja"
