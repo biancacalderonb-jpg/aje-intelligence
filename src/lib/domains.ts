@@ -62,9 +62,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#fb923c',
     number: 4,
     queries: [
-      'modelo suscripcion consumo masivo',
-      'monetizacion data retail',
-      'ecosistema digital marcas FMCG',
+      'monetizacion FMCG suscripcion data 2026',
     ],
     fuentes: 'HBR, Forbes, Bloomberg, Semana Económica',
     descripcion:
@@ -76,9 +74,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#f87171',
     number: 5,
     queries: [
-      'startup disruption bebidas Latam',
-      'D2C alimentos Peru 2025',
-      'modelo negocio disruptivo retail',
+      'startups D2C bebidas alimentos Latam 2026',
     ],
     fuentes: 'The Food Tech, Fintech Weekly, Bloomberg, Forbes Innovation, WFC',
     descripcion:

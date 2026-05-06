@@ -9,6 +9,20 @@ import Sidebar from '@/components/Sidebar';
 import NewsFeed from '@/components/NewsFeed';
 import RightPanel from '@/components/RightPanel';
 
+async function saveEmptyResult(dominioKey: Dominio) {
+  const label = DOMINIOS[dominioKey].label;
+  await supabase.from('noticias').insert({
+    titulo: `Sin resultados — ${label}`,
+    resumen: 'No se encontraron noticias en las últimas 24 horas para este dominio. Intenta de nuevo más tarde.',
+    fuente: 'AJE Intelligence',
+    url: null,
+    dominio: dominioKey,
+    linea_relacionada: 'todas',
+    relevancia: 'baja',
+    es_manual: false,
+  });
+}
+
 export default function Home() {
   const [noticias, setNoticias] = useState<Noticia[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +96,11 @@ export default function Home() {
         });
 
         const data = await res.json();
+        const count = data.count ?? 0;
+
+        if (!res.ok || count === 0) {
+          await saveEmptyResult(dominioKey);
+        }
 
         setProgress((prev) =>
           prev
@@ -90,13 +109,14 @@ export default function Home() {
                 [dominioKey]: {
                   ...prev[dominioKey],
                   status: res.ok ? 'done' : 'error',
-                  count: data.count ?? 0,
+                  count,
                   error: data.error,
                 },
               }
             : prev
         );
       } catch (err) {
+        await saveEmptyResult(dominioKey);
         setProgress((prev) =>
           prev
             ? {
