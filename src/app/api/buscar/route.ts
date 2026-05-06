@@ -106,7 +106,7 @@ CRITERIOS DE SELECCIÓN:
 - Relevancia ALTA: disrupciones significativas, regulaciones nuevas con impacto directo, movimientos competitivos relevantes
 - Relevancia MEDIA: tendencias emergentes, cambios de comportamiento, novedades tecnológicas
 - Relevancia BAJA: contexto general, información de fondo
-- Incluye entre 3 y 5 señales concretas
+- Devuelve EXACTAMENTE 2 noticias, ni más ni menos.
 
 RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, solo el objeto):
 {
@@ -115,7 +115,14 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
       "titulo": "Título conciso que describe la señal estratégica",
       "resumen": "2-3 oraciones: qué ocurrió (con fecha de publicación), datos concretos si los hay, y por qué importa estratégicamente para una empresa de bebidas y consumo masivo en Latam",
       "fuente": "Nombre del medio o fuente específica",
-      "url": "https://url-completa-del-articulo.com (si está disponible, si no omitir o null)",
+      "url": "https://url-completa-del-articulo.com (si está disponible, si no null)",
+      "relevancia": "alta|media|baja"
+    },
+    {
+      "titulo": "Segunda señal estratégica",
+      "resumen": "2-3 oraciones con fecha, datos concretos e implicación estratégica",
+      "fuente": "Nombre del medio o fuente específica",
+      "url": "https://url-completa-del-articulo.com (si está disponible, si no null)",
       "relevancia": "alta|media|baja"
     }
   ]
