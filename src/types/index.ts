@@ -1,13 +1,12 @@
 export type Dominio =
   | 'consumidor'
   | 'canales'
-  | 'operaciones'
   | 'tecnologia'
   | 'margen'
   | 'competencia'
   | 'finanzas'
   | 'coherencia'
-  | 'ciencia';
+  | 'operaciones';
 
 export type LineaRelacionada = 'aje' | 'toquea' | 't3a' | 'ventures' | 'todas';
 export type Relevancia = 'alta' | 'media' | 'baja';

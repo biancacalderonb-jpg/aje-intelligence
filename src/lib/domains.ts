@@ -42,26 +42,11 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     descripcion:
       'quién controla el acceso al cliente: marketplaces, super-apps, quick commerce, DTC, integraciones verticales en Latinoamérica.',
   },
-  operaciones: {
-    key: 'operaciones',
-    label: 'Operaciones Internas',
-    color: '#94a3b8',
-    number: 3,
-    queries: [
-      'AJE Group Peru noticias 2025',
-      'Tiendas 3A expansion Peru',
-      'Toquea fintech novedades Peru',
-    ],
-    fuentes: 'LinkedIn, Instagram, noticias corporativas, medios de negocio',
-    descripcion:
-      'señales de AJE Group, Tiendas 3A, Toquea y New Ventures. Complementa con entradas manuales del equipo.',
-    esManual: true,
-  },
   tecnologia: {
     key: 'tecnologia',
     label: 'Tecnología / Capacidades',
     color: '#a78bfa',
-    number: 4,
+    number: 3,
     queries: [
       'inteligencia artificial retail 2025',
       'automatizacion FMCG operaciones',
@@ -75,7 +60,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     key: 'margen',
     label: 'Modelo de Margen',
     color: '#fb923c',
-    number: 5,
+    number: 4,
     queries: [
       'modelo suscripcion consumo masivo',
       'monetizacion data retail',
@@ -89,7 +74,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     key: 'competencia',
     label: 'Competencia No Tradicional',
     color: '#f87171',
-    number: 6,
+    number: 5,
     queries: [
       'startup disruption bebidas Latam',
       'D2C alimentos Peru 2025',
@@ -103,7 +88,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     key: 'finanzas',
     label: 'Finanzas / Riesgo',
     color: '#facc15',
-    number: 7,
+    number: 6,
     queries: [
       'regulacion fintech Peru SBS 2025',
       'riesgo macroeconomico Peru Latam',
@@ -117,7 +102,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     key: 'coherencia',
     label: 'Coherencia Estratégica',
     color: '#4af0c8',
-    number: 8,
+    number: 7,
     queries: [
       'ESG greenwashing bebidas Latam',
       'coherencia estrategica retail Peru',
@@ -127,30 +112,31 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     descripcion:
       'decisiones que contradicen el propósito declarado o la estrategia del sector consumo masivo.',
   },
-  ciencia: {
-    key: 'ciencia',
-    label: 'Medicina / Ciencia',
-    color: '#34d399',
-    number: 9,
+  operaciones: {
+    key: 'operaciones',
+    label: 'Operaciones Internas',
+    color: '#94a3b8',
+    number: 8,
     queries: [
-      'ingredientes bebidas salud 2025',
-      'regulacion sanitaria alimentos Peru',
-      'ciencia nutricion consumo',
+      'AJE Group Peru noticias 2025',
+      'Tiendas 3A expansion Peru',
+      'Toquea fintech novedades Peru',
     ],
-    fuentes: 'medicalxpress.com, sciencedaily.com, The Food Tech',
+    fuentes: 'LinkedIn, Instagram, noticias corporativas, medios de negocio',
     descripcion:
-      'hallazgos científicos y regulatorios que impacten al consumidor o a los productos de bebidas y alimentos.',
+      'señales de AJE Group, Tiendas 3A, Toquea y New Ventures. Complementa con entradas manuales del equipo.',
+    esManual: true,
   },
 };
 
+// Operaciones goes last: it's semi-manual and runs after all automatic domains
 export const DOMINIOS_ORDER: Dominio[] = [
   'consumidor',
   'canales',
-  'operaciones',
   'tecnologia',
   'margen',
   'competencia',
   'finanzas',
   'coherencia',
-  'ciencia',
+  'operaciones',
 ];

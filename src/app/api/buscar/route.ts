@@ -121,9 +121,9 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
   ]
 }`;
 
-    // max_uses capped at 2 to stay within Vercel Hobby's 10s function timeout
+    // max_uses: 1 — one web search per domain call, stays within Vercel Hobby's 10s limit
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const tools: any[] = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 2 }];
+    const tools: any[] = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 1 }];
 
     const response = await anthropic.messages.create({
       model: 'claude-opus-4-7',
