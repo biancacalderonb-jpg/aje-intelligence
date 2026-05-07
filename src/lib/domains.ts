@@ -18,10 +18,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#e879f9',
     number: 1,
     queries: [
-      'cambios habitos consumidor Latam 2025',
-      'tendencias consumo saludable Peru',
-      'generacion Z consumo masivo',
-      'bienestar sostenibilidad consumidor',
+      'tendencias consumidor salud bienestar 2026',
+      'habitos compra generacion Z millennials Latam',
+      'sostenibilidad identidad consumidor alimentos bebidas',
     ],
     fuentes: 'Google Noticias, medicalxpress.com, sciencedaily.com, Forbes, Semana Económica',
     descripcion:
@@ -33,10 +32,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#38bdf8',
     number: 2,
     queries: [
-      'quick commerce Latam 2025',
-      'super app Peru',
-      'DTC marcas consumo masivo',
-      'marketplace retail Peru',
+      'quick commerce marketplace retail Latam 2026',
+      'super app DTC canal directo consumidor',
+      'retail moderno hard discount expansion',
     ],
     fuentes: 'Peru Retail, America Retail, TechCrunch, Google Noticias',
     descripcion:
@@ -48,9 +46,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#a78bfa',
     number: 3,
     queries: [
-      'inteligencia artificial retail 2025',
-      'automatizacion FMCG operaciones',
-      'IA supply chain alimentos Latam',
+      'inteligencia artificial automatizacion retail FMCG 2026',
+      'software operativo data supply chain alimentos',
+      'tecnologia estandar industria bebidas consumo masivo',
     ],
     fuentes: 'HBR, MIT Sloan, Forbes, TechCrunch, GeekWire, CNBC Technology, Fintech Weekly',
     descripcion:
@@ -62,7 +60,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#fb923c',
     number: 4,
     queries: [
-      'monetizacion FMCG suscripcion data 2026',
+      'modelo suscripcion servicio consumo masivo 2026',
+      'monetizacion data ecosistema digital retail',
+      'revenue stream nuevo FMCG as-a-service',
     ],
     fuentes: 'HBR, Forbes, Bloomberg, Semana Económica',
     descripcion:
@@ -74,7 +74,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#f87171',
     number: 5,
     queries: [
-      'startups D2C bebidas alimentos Latam 2026',
+      'startup disruptivo alimentos bebidas modelo negocio 2026',
+      'D2C marca directa consumidor Latam fintech retail',
+      'scaleup innovacion consumo experiencia tecnologia',
     ],
     fuentes: 'The Food Tech, Fintech Weekly, Bloomberg, Forbes Innovation, WFC',
     descripcion:
@@ -86,9 +88,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#facc15',
     number: 6,
     queries: [
-      'regulacion fintech Peru SBS 2025',
-      'riesgo macroeconomico Peru Latam',
-      'inversion venture capital alimentos Peru',
+      'regulacion fintech retail Peru Latam 2026',
+      'inversion venture capital alimentos bebidas startup',
+      'riesgo regulatorio cambio legislacion consumo masivo',
     ],
     fuentes: 'Bloomberg, Semana Económica, Gestión, SBS Perú, Fintech Weekly',
     descripcion:
@@ -100,9 +102,9 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     color: '#4af0c8',
     number: 7,
     queries: [
-      'ESG greenwashing bebidas Latam',
-      'coherencia estrategica retail Peru',
-      'proposito marca consumo masivo',
+      'ESG sostenibilidad empresa consumo masivo contradiccion',
+      'estrategia corporativa retail bebidas decision controversial',
+      'greenwashing proposito marca FMCG Latam 2026',
     ],
     fuentes: 'HBR, MIT Sloan, Forbes, Semana Económica',
     descripcion:
