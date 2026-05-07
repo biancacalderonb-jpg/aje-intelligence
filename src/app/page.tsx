@@ -65,7 +65,33 @@ export default function Home() {
     if (stored) setUltimaBusqueda(stored);
   }, []);
 
-  const handleSearch = async () => {
+  const handleSearchOne = async (dominioKey: Dominio) => {
+    if (searching) return;
+    setSearching(true);
+    setSearchMessage(`Buscando ${DOMINIOS[dominioKey].label}...`);
+
+    try {
+      const res = await fetch('/api/buscar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dominio: dominioKey }),
+      });
+      const data = await res.json();
+      const count = data.count ?? 0;
+      if (!res.ok || count === 0) await saveEmptyResult(dominioKey);
+    } catch {
+      await saveEmptyResult(dominioKey);
+    }
+
+    const now = new Date().toISOString();
+    setUltimaBusqueda(now);
+    localStorage.setItem('aje_ultima_busqueda', now);
+    setSearchMessage('');
+    setSearching(false);
+    await fetchNoticias();
+  };
+
+  const handleSearchAll = async () => {
     if (searching) return;
     setSearching(true);
 
@@ -139,8 +165,6 @@ export default function Home() {
     setSearchMessage('');
     setSearching(false);
     await fetchNoticias();
-
-    // Clear progress after 5 seconds
     setTimeout(() => setProgress(null), 5000);
   };
 
@@ -165,7 +189,8 @@ export default function Home() {
         progress={progress}
         ultimaBusqueda={ultimaBusqueda}
         totalCount={totalCount}
-        onSearch={handleSearch}
+        onSearchOne={handleSearchOne}
+        onSearchAll={handleSearchAll}
       />
 
       <div
