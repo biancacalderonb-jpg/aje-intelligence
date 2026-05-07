@@ -139,7 +139,7 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
     const tools: any[] = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 1 }];
 
     const response = await anthropic.messages.create({
-      model: 'claude-opus-4-7',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 4000,
       tools,
       messages: [{ role: 'user', content: prompt }],
