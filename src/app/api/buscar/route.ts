@@ -85,9 +85,18 @@ export async function POST(request: NextRequest) {
 
     const dominio = DOMINIOS[dominioKey];
 
+    const now = new Date();
+    const esLunes = now.getDay() === 1;
+    const horasAtras = esLunes ? 60 : 24;
+    const fechaInicio = new Date(now.getTime() - horasAtras * 60 * 60 * 1000);
+    const fechaInicioStr = fechaInicio.toLocaleString('es-PE', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZone: 'America/Lima',
+    });
+
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
-IMPORTANTE: Busca las noticias MÁS RECIENTES que puedas encontrar sobre este tema. Prioriza contenido de 2025-2026. Incluye siempre la fecha de publicación en el resumen. No rechaces una noticia por ser de hace una semana — lo importante es que sea relevante y reciente.
+IMPORTANTE: Solo reporta noticias publicadas después del ${fechaInicioStr} (últimas ${horasAtras} horas${esLunes ? ' — cobertura de fin de semana' : ''}). Si no encuentras noticias en ese rango, responde con un array vacío []. Incluye siempre la fecha de publicación en el resumen.
 
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
