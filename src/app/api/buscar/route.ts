@@ -6,9 +6,6 @@ import { Dominio, LineaRelacionada, Relevancia } from '@/types';
 
 export const maxDuration = 120;
 
-const hoy = new Date().toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
-const ayer = new Date(Date.now() - 86400000).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
-
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const supabase = createClient(
@@ -90,18 +87,18 @@ export async function POST(request: NextRequest) {
 
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
-IMPORTANTE: Solo busca y reporta noticias publicadas entre ${ayer} y ${hoy} (últimas 24 horas). Si una noticia es más antigua, ignórala completamente. Incluye la fecha de publicación en cada resultado.
+IMPORTANTE: Busca las noticias MÁS RECIENTES que puedas encontrar sobre este tema. Prioriza contenido de 2025-2026. Incluye siempre la fecha de publicación en el resumen. No rechaces una noticia por ser de hace una semana — lo importante es que sea relevante y reciente.
 
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
 
-TAREA: Realiza búsquedas web con estas consultas exactas y encuentra señales estratégicas relevantes:
-${dominio.queries.map((q, i) => `${i + 1}. "${q} 2026 últimas 24 horas"`).join('\n')}
+TAREA: Realiza búsquedas web con estas consultas y encuentra señales estratégicas relevantes:
+${dominio.queries.map((q, i) => `${i + 1}. "${q}"`).join('\n')}
 
 FUENTES PRIORITARIAS: ${dominio.fuentes}
 
 CRITERIOS DE SELECCIÓN:
-- SOLO noticias de las últimas 24 horas (entre ${ayer} y ${hoy})
+- Prioriza las noticias más recientes disponibles (2025-2026)
 - Busca señales de CAMBIO, no noticias genéricas
 - Relevancia ALTA: disrupciones significativas, regulaciones nuevas con impacto directo, movimientos competitivos relevantes
 - Relevancia MEDIA: tendencias emergentes, cambios de comportamiento, novedades tecnológicas
