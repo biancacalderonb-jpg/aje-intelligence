@@ -98,7 +98,12 @@ export async function POST(request: NextRequest) {
 
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
-CRÍTICO: La fecha de hoy es ${ahora.toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}. SOLO incluye noticias publicadas después del ${fechaLimite}. Verifica la fecha de cada artículo antes de incluirlo. Noticias de enero, febrero, marzo, abril = IGNORAR COMPLETAMENTE. Incluye la fecha de publicación en el resumen de cada noticia.
+REGLA ABSOLUTA DE FECHA: Hoy es ${ahora.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' })}.
+NO incluyas NINGUNA noticia publicada antes del ${fechaLimite}.
+Antes de incluir cada noticia, verifica su fecha de publicación.
+Si no puedes confirmar que fue publicada en los últimos 7 días, DESCÁRTALA.
+Es preferible devolver 0 noticias que incluir una noticia antigua.
+Incluye la fecha de publicación en el resumen de cada noticia.
 
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
