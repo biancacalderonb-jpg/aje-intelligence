@@ -44,15 +44,22 @@ export default function Header({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
+  // Close on outside click or Escape key
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
+    const handleClick = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKey);
+    };
   }, []);
 
   // Also close when a search starts
@@ -199,7 +206,7 @@ export default function Header({
                   <RefreshCw size={13} className="flex-shrink-0" />
                   <span className="flex-1">Buscar todos</span>
                   <span className="text-xs" style={{ color: '#475569' }}>
-                    {AUTO_DOMINIOS.length}/8 dominios
+                    {AUTO_DOMINIOS.length} dominios
                   </span>
                 </button>
               </div>
