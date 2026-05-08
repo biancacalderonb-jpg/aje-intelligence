@@ -85,15 +85,26 @@ export async function POST(request: NextRequest) {
 
     const dominio = DOMINIOS[dominioKey];
 
+    const ahora = new Date();
+    const haceUnaSemana = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const fechaLimite = haceUnaSemana.toLocaleDateString('es-PE', {
+      day: 'numeric', month: 'long', year: 'numeric',
+      timeZone: 'America/Lima',
+    });
+    const mesActual = ahora.toLocaleDateString('es-PE', {
+      month: 'long', year: 'numeric',
+      timeZone: 'America/Lima',
+    });
+
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
-IMPORTANTE: Busca las noticias más recientes disponibles sobre este tema. Incluye la fecha de publicación en el resumen de cada noticia.
+IMPORTANTE: Solo incluye noticias publicadas después del ${fechaLimite}. Si una noticia es más antigua, ignórala y devuelve array vacío []. Incluye la fecha de publicación en el resumen de cada noticia.
 
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
 
 TAREA: Realiza búsquedas web con estas consultas y encuentra señales estratégicas relevantes:
-${dominio.queries.map((q, i) => `${i + 1}. "${q}"`).join('\n')}
+${dominio.queries.map((q, i) => `${i + 1}. "${q} ${mesActual}"`).join('\n')}
 
 FUENTES PRIORITARIAS: ${dominio.fuentes}
 
