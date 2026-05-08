@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
 
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
-IMPORTANTE: Solo incluye noticias publicadas después del ${fechaLimite}. Si una noticia es más antigua, ignórala y devuelve array vacío []. Incluye la fecha de publicación en el resumen de cada noticia.
+CRÍTICO: La fecha de hoy es ${ahora.toLocaleDateString('es-PE', { timeZone: 'America/Lima' })}. SOLO incluye noticias publicadas después del ${fechaLimite}. Verifica la fecha de cada artículo antes de incluirlo. Noticias de enero, febrero, marzo, abril = IGNORAR COMPLETAMENTE. Incluye la fecha de publicación en el resumen de cada noticia.
 
 DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
@@ -115,6 +115,7 @@ CRITERIOS DE SELECCIÓN:
 - Relevancia MEDIA: tendencias emergentes, cambios de comportamiento, novedades tecnológicas
 - Relevancia BAJA: contexto general, información de fondo
 - Devuelve EXACTAMENTE 2 noticias, ni más ni menos.
+- En el campo resumen NO incluyas etiquetas como <cite>, </cite>, ni ningún código HTML o XML. Solo texto plano.
 
 RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, solo el objeto):
 {
