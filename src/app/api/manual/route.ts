@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { LineaRelacionada, Relevancia } from '@/types';
+import { Dominio, LineaRelacionada, Relevancia } from '@/types';
+import { DOMINIOS } from '@/lib/domains';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -10,7 +11,7 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { titulo, resumen, fuente, url, linea_relacionada, relevancia } = body;
+    const { titulo, resumen, fuente, url, dominio, linea_relacionada, relevancia } = body;
 
     if (!titulo?.trim() || !resumen?.trim()) {
       return NextResponse.json({ error: 'Título y resumen son obligatorios' }, { status: 400 });
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
       resumen: resumen.trim().slice(0, 2000),
       fuente: (fuente || 'Manual').trim().slice(0, 200),
       url: sanitizedUrl,
-      dominio: 'operaciones',
+      dominio: (dominio && DOMINIOS[dominio as Dominio]) ? (dominio as Dominio) : 'operaciones',
       linea_relacionada: validLineas.includes(linea_relacionada) ? linea_relacionada : 'todas',
       relevancia: validRelevancias.includes(relevancia) ? relevancia : 'media',
       es_manual: true,

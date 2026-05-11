@@ -15,6 +15,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
   const [resumen, setResumen] = useState('');
   const [fuente, setFuente] = useState('');
   const [url, setUrl] = useState('');
+  const [dominio, setDominio] = useState<Dominio>('operaciones');
   const [linea, setLinea] = useState<LineaRelacionada>('todas');
   const [relevancia, setRelevancia] = useState<Relevancia>('media');
   const [saving, setSaving] = useState(false);
@@ -39,7 +40,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
       const res = await fetch('/api/manual', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ titulo, resumen, fuente, url, linea_relacionada: linea, relevancia }),
+        body: JSON.stringify({ titulo, resumen, fuente, url, dominio, linea_relacionada: linea, relevancia }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -50,6 +51,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
       setResumen('');
       setFuente('');
       setUrl('');
+      setDominio('operaciones');
       setLinea('todas');
       setRelevancia('media');
       onManualSaved();
@@ -110,7 +112,7 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
           </span>
         </div>
         <p className="text-xs mb-4" style={{ color: '#475569', lineHeight: '1.5' }}>
-          Para Operaciones Internas: pega posts de LinkedIn / Instagram o redacta señales observadas.
+          Pega posts de LinkedIn / Instagram o redacta señales observadas para cualquier dominio.
         </p>
 
         <div className="space-y-3">
@@ -192,6 +194,26 @@ export default function RightPanel({ noticias, onManualSaved }: RightPanelProps)
               onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(167,139,250,0.4)')}
               onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#64748b' }}>
+              Dominio *
+            </label>
+            <select
+              value={dominio}
+              onChange={(e) => setDominio(e.target.value as Dominio)}
+              className="w-full text-sm rounded-lg px-2 py-2 outline-none"
+              style={{
+                background: '#111118',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#f1f5f9',
+              }}
+            >
+              {DOMINIOS_ORDER.map((key) => (
+                <option key={key} value={key}>{DOMINIOS[key].label}</option>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-2 gap-2">

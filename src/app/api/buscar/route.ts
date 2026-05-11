@@ -96,6 +96,14 @@ export async function POST(request: NextRequest) {
       timeZone: 'America/Lima',
     });
 
+    const cutoff = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { data: existingRows } = await supabase
+      .from('noticias')
+      .select('titulo')
+      .eq('dominio', dominioKey)
+      .gte('created_at', cutoff);
+    const existingTitles = (existingRows ?? []).map((r) => r.titulo as string).filter(Boolean);
+
     const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
 
 REGLA ABSOLUTA DE FECHA: Hoy es ${ahora.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' })}.
@@ -105,7 +113,7 @@ Si no puedes confirmar que fue publicada en los últimos 7 días, DESCÁRTALA.
 Es preferible devolver 0 noticias que incluir una noticia antigua.
 Incluye la fecha de publicación en el resumen de cada noticia.
 
-DOMINIO DE ANÁLISIS: ${dominio.label}
+${existingTitles.length > 0 ? `YA EXISTEN ESTAS NOTICIAS EN LA PLATAFORMA, NO las repitas ni incluyas noticias sobre el mismo tema:\n${existingTitles.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\n` : ''}DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
 
 TAREA: Realiza búsquedas web con estas consultas y encuentra señales estratégicas relevantes:
