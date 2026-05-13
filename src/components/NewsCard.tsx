@@ -10,16 +10,15 @@ interface NewsCardProps {
   onDelete?: (id: string) => void;
 }
 
-const DOMAIN_KEYWORDS: Record<string, string> = {
-  consumidor: 'consumer,lifestyle',
-  canales: 'retail,marketplace',
-  tecnologia: 'technology,artificial-intelligence',
-  margen: 'finance,business',
-  competencia: 'strategy,leadership',
-  finanzas: 'economy,investment',
-  coherencia: 'corporate,strategy',
-  operaciones: 'operations,industry',
-};
+function getImageSeed(titulo: string): string {
+  const seed = titulo
+    .split(/\s+/)
+    .slice(0, 2)
+    .join('')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .toLowerCase();
+  return seed || 'news';
+}
 
 const RELEVANCIA_STYLE: Record<string, { label: string; color: string; bg: string }> = {
   alta: { label: 'Alta', color: '#f87171', bg: 'rgba(248,113,113,0.15)' },
@@ -55,8 +54,8 @@ export default function NewsCard({ noticia, onDelete }: NewsCardProps) {
   const linea = LINEA_LABELS[noticia.linea_relacionada];
   const rel = RELEVANCIA_STYLE[noticia.relevancia];
 
-  const keyword = DOMAIN_KEYWORDS[noticia.dominio] || 'business';
-  const imageUrl = `https://source.unsplash.com/400x300/?${keyword}`;
+  const seed = getImageSeed(noticia.titulo);
+  const imageUrl = `https://picsum.photos/seed/${seed}/400/200`;
 
   const handleDelete = async () => {
     if (!confirm('¿Eliminar esta señal?')) return;
