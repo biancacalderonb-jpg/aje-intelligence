@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExternalLink, Pencil, Trash2 } from 'lucide-react';
 import { Noticia } from '@/types';
 import { DOMINIOS } from '@/lib/domains';
@@ -10,14 +10,9 @@ interface NewsCardProps {
   onDelete?: (id: string) => void;
 }
 
-function getImageSeed(titulo: string): string {
-  const seed = titulo
-    .split(/\s+/)
-    .slice(0, 2)
-    .join('')
-    .replace(/[^a-zA-Z0-9]/g, '')
-    .toLowerCase();
-  return seed || 'news';
+function picsumUrl(query: string): string {
+  const seed = query.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'news';
+  return `https://picsum.photos/seed/${seed}/400/200`;
 }
 
 const RELEVANCIA_STYLE: Record<string, { label: string; color: string; bg: string }> = {
@@ -54,8 +49,16 @@ export default function NewsCard({ noticia, onDelete }: NewsCardProps) {
   const linea = LINEA_LABELS[noticia.linea_relacionada];
   const rel = RELEVANCIA_STYLE[noticia.relevancia];
 
-  const seed = getImageSeed(noticia.titulo);
-  const imageUrl = `https://picsum.photos/seed/${seed}/400/200`;
+  const fallbackUrl = picsumUrl(noticia.imagen_query || noticia.titulo);
+  const [imageUrl, setImageUrl] = useState(fallbackUrl);
+
+  useEffect(() => {
+    if (!noticia.url) return;
+    fetch(`/api/og?url=${encodeURIComponent(noticia.url)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => { if (data?.image) { setImgError(false); setImageUrl(data.image); } })
+      .catch(() => {});
+  }, [noticia.url]);
 
   const handleDelete = async () => {
     if (!confirm('¿Eliminar esta señal?')) return;
@@ -89,7 +92,13 @@ export default function NewsCard({ noticia, onDelete }: NewsCardProps) {
           <img
             src={imageUrl}
             alt=""
-            onError={() => setImgError(true)}
+            onError={() => {
+              if (imageUrl !== fallbackUrl) {
+                setImageUrl(fallbackUrl);
+              } else {
+                setImgError(true);
+              }
+            }}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         ) : (

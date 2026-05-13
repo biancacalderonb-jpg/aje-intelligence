@@ -22,6 +22,7 @@ export interface Noticia {
   relevancia: Relevancia;
   es_manual: boolean;
   created_at: string;
+  imagen_query?: string | null;
 }
 
 export type SearchStatus = 'idle' | 'pending' | 'searching' | 'done' | 'error';

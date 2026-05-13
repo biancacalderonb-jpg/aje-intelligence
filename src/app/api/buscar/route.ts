@@ -19,6 +19,7 @@ interface NoticiaRaw {
   fuente?: string;
   url?: string;
   relevancia?: string;
+  imagen_query?: string;
 }
 
 function extractNoticias(text: string): NoticiaRaw[] {
@@ -152,14 +153,16 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
       "resumen": "2-3 oraciones: qué ocurrió (con fecha de publicación), datos concretos si los hay, y por qué importa estratégicamente para una empresa de bebidas y consumo masivo en Latam",
       "fuente": "Nombre del medio o fuente específica",
       "url": "https://url-completa-del-articulo.com (si está disponible, si no null)",
-      "relevancia": "alta|media|baja"
+      "relevancia": "alta|media|baja",
+      "imagen_query": "2-3 palabras en inglés que describan visualmente el tema (ej: 'fintech mobile payment', 'AI technology data', 'retail store discount', 'food beverage health')"
     },
     {
       "titulo": "Segunda señal estratégica",
       "resumen": "2-3 oraciones con fecha, datos concretos e implicación estratégica",
       "fuente": "Nombre del medio o fuente específica",
       "url": "https://url-completa-del-articulo.com (si está disponible, si no null)",
-      "relevancia": "alta|media|baja"
+      "relevancia": "alta|media|baja",
+      "imagen_query": "2-3 palabras en inglés que describan visualmente el tema"
     }
   ]
 }`;
@@ -195,6 +198,7 @@ RESPONDE ÚNICAMENTE con este JSON (sin markdown, sin texto antes ni después, s
       linea_relacionada: inferLinea(n.titulo || '', n.resumen || ''),
       relevancia: sanitizeRelevancia(n.relevancia),
       es_manual: false,
+      imagen_query: n.imagen_query?.slice(0, 200) || null,
     }));
 
     const { error: dbError } = await supabase.from('noticias').insert(toInsert);
