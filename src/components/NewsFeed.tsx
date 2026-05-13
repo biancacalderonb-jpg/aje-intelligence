@@ -40,7 +40,7 @@ export default function NewsFeed({ noticias, loading, onDelete }: NewsFeedProps)
   }
 
   return (
-    <div className="space-y-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {noticias.map((n) => (
         <NewsCard key={n.id} noticia={n} onDelete={onDelete} />
       ))}
