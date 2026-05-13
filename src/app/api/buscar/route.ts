@@ -96,13 +96,15 @@ export async function POST(request: NextRequest) {
       timeZone: 'America/Lima',
     });
 
-    const cutoff = new Date(ahora.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const cutoff30d = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const { data: existingRows } = await supabase
       .from('noticias')
-      .select('titulo')
+      .select('titulo, fuente')
       .eq('dominio', dominioKey)
-      .gte('created_at', cutoff);
-    const existingTitles = (existingRows ?? []).map((r) => r.titulo as string).filter(Boolean);
+      .gte('created_at', cutoff30d);
+    const existingTitles = (existingRows ?? [])
+      .map((r) => `${r.titulo as string}${r.fuente ? ` (${r.fuente as string})` : ''}`)
+      .filter(Boolean);
 
     const esPromptEspecializado = ['tecnologia', 'margen', 'competencia'].includes(dominioKey);
 
@@ -120,14 +122,12 @@ Prioriza:
 
     const prompt = `${promptBase}
 
-REGLA ABSOLUTA DE FECHA: Hoy es ${ahora.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' })}.
-NO incluyas NINGUNA noticia publicada antes del ${fechaLimite}.
-Antes de incluir cada noticia, verifica su fecha de publicación.
-Si no puedes confirmar que fue publicada en los últimos 7 días, DESCÁRTALA.
-Es preferible devolver 0 noticias que incluir una noticia antigua.
+REGLA ABSOLUTA: Solo noticias publicadas en los últimos 7 días exactos (después del ${fechaLimite}). Noticias más antiguas = DESCARTAR sin excepción.
+Hoy es ${ahora.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' })}.
 Incluye la fecha de publicación en el resumen de cada noticia.
+Es preferible devolver 0 noticias que incluir una noticia antigua.
 
-${existingTitles.length > 0 ? `YA EXISTEN ESTAS NOTICIAS EN LA PLATAFORMA, NO las repitas ni incluyas noticias sobre el mismo tema:\n${existingTitles.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\n` : ''}DOMINIO DE ANÁLISIS: ${dominio.label}
+${existingTitles.length > 0 ? `NOTICIAS YA EXISTENTES EN LA PLATAFORMA (NO REPETIR NI CUBRIR EL MISMO TEMA/EVENTO):\n${existingTitles.join(' | ')}\nREGLA: Si una noticia trata el mismo tema, evento o institución que alguna de las anteriores (aunque tenga título diferente), DESCÁRTALA. Por ejemplo, si ya existe una noticia sobre BCRP esta semana, no incluyas otra sobre BCRP aunque sea diferente.\n\n` : ''}DOMINIO DE ANÁLISIS: ${dominio.label}
 DESCRIPCIÓN: ${dominio.descripcion}
 
 TAREA: Realiza búsquedas web con estas consultas y encuentra señales estratégicas relevantes:
