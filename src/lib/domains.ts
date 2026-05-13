@@ -53,7 +53,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     ],
     fuentes: 'HBR, Forbes, TechCrunch, GeekWire, CNBC Technology, MIT Sloan, Semana Económica',
     descripcion:
-      'IA, automatización, data y software operativo que se vuelve estándar de industria en FMCG y retail.',
+      'Buscar noticias relacionadas con IA, infraestructura tecnológica, automatización, datos, cloud, agentes IA, capacidades digitales, innovación operativa, ciberseguridad, plataformas tecnológicas y transformación digital.',
   },
   margen: {
     key: 'margen',
@@ -68,7 +68,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     ],
     fuentes: 'forbes.pe, Forbes, Semana Económica, Bloomberg, HBR',
     descripcion:
-      'cómo se genera dinero fuera del producto: servicios, suscripciones, data, ecosistemas, as-a-service en consumo masivo.',
+      'Buscar noticias relacionadas con eficiencia operativa, costos, pricing, supply chain, adquisiciones, modelos de negocio, monetización, suscripciones, rentabilidad, resiliencia financiera, inflación, energía, expansión rentable y captura de valor.',
   },
   competencia: {
     key: 'competencia',
@@ -82,7 +82,7 @@ export const DOMINIOS: Record<Dominio, DominioConfig> = {
     ],
     fuentes: 'HBR, Fintech Weekly, Bloomberg, WFC, Semana Económica',
     descripcion:
-      'startups y scaleups que compiten en lógica, no en volumen, en el ecosistema de bebidas y alimentos en Latam.',
+      'Buscar noticias relacionadas con liderazgo, cultura, talento, adaptabilidad, habilidades híbridas, reskilling, transformación cultural, gobernanza, confianza organizacional, nuevas formas de competencia y cambios generacionales.',
   },
   finanzas: {
     key: 'finanzas',

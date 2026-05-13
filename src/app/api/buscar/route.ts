@@ -104,7 +104,21 @@ export async function POST(request: NextRequest) {
       .gte('created_at', cutoff);
     const existingTitles = (existingRows ?? []).map((r) => r.titulo as string).filter(Boolean);
 
-    const prompt = `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica).
+    const esPromptEspecializado = ['tecnologia', 'margen', 'competencia'].includes(dominioKey);
+
+    const promptBase = esPromptEspecializado
+      ? `Actúa como un analista estratégico especializado en tendencias empresariales y transformación organizacional.
+
+Realiza una búsqueda de noticias y artículos recientes en fuentes como Harvard Business Review (HBR), MIT Sloan Management Review, Forbes Latam, Semana Económica, World Economic Forum, Financial Times, McKinsey y otras fuentes empresariales relevantes.
+
+Prioriza:
+- Noticias globales y LATAM
+- Tendencias con impacto estructural
+- Señales emergentes que puedan afectar competitividad futura
+- Casos empresariales aplicables a industrias de consumo masivo, retail, manufactura, logística y tecnología`
+      : `Eres un analista de inteligencia estratégica para una consultoría que trabaja con AJE Group (empresa líder de bebidas y consumo masivo en Latinoamérica)`;
+
+    const prompt = `${promptBase}
 
 REGLA ABSOLUTA DE FECHA: Hoy es ${ahora.toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' })}.
 NO incluyas NINGUNA noticia publicada antes del ${fechaLimite}.
